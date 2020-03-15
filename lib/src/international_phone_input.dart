@@ -17,6 +17,7 @@ class InternationalPhoneInput extends StatefulWidget {
   final String errorText;
   final String hintText;
   final String labelText;
+  final bool autovalidate;
   final TextStyle errorStyle;
   final TextStyle hintStyle;
   final TextStyle labelStyle;
@@ -30,6 +31,7 @@ class InternationalPhoneInput extends StatefulWidget {
       this.errorText,
       this.hintText,
       this.labelText,
+	  this.autovalidate,
       this.errorStyle,
       this.hintStyle,
       this.labelStyle,
@@ -107,11 +109,11 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
       PhoneService.parsePhoneNumber(phoneText, selectedItem.code)
           .then((isValid) {
         setState(() {
-          hasError = !isValid;
+          hasError = !isValid && widget.autovalidate;
         });
 
         if (widget.onPhoneNumberChange != null) {
-          if (isValid) {
+          if (isValid || !widget.autovalidate) {
             PhoneService.getNormalizedPhoneNumber(phoneText, selectedItem.code)
                 .then((number) {
               widget.onPhoneNumberChange(phoneText, number, selectedItem.code);
